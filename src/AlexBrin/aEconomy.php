@@ -18,8 +18,9 @@ use pocketmine\OfflinePlayer;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use pocketmine\event\Listener;
 
-class aEconomy extends PluginBase {
+class aEconomy extends PluginBase implements Listener {
 
     /**
      * @var Config $config
@@ -41,6 +42,8 @@ class aEconomy extends PluginBase {
         $this->saveResource('config.yml');
         $this->config = new Config($f.'config.yml', Config::YAML);
         $this->players = new Config($f.'players.json', Config::JSON);
+
+        $this->getServer()->getPluginManager()->registerEvents(new EventHandler($this), $this);
 
         $this->getServer()->getCommandMap()->register(
             'money',
@@ -80,11 +83,11 @@ class aEconomy extends PluginBase {
     }
 
     /**
-     * @param  string|Player $player
+     * @param  string|OfflinePlayer|Player $player
      * @return string
      */
     public function getPlayer($player): string {
-        if($player instanceof Player)
+        if($player instanceof Player || $player instanceof OfflinePlayer)
             $player = $player->getName();
 
         return mb_strtolower($player);
@@ -102,7 +105,7 @@ class aEconomy extends PluginBase {
     public function getMoney($player) {
         $player = $this->getPlayer($player);
 
-        return $this->players->get($player);
+        return $this->players->get($player, null);
     }
 
     /**
@@ -174,9 +177,10 @@ class aEconomy extends PluginBase {
             $player->sendMessage(
                 $this->getMessage(
                     'set.in',
-                    [$ev->getAmount()]
+                    [$ev->getAmount(), $player->getName()]
                 )
             );
+
         return true;
     }
 
@@ -206,6 +210,8 @@ class aEconomy extends PluginBase {
             )
         );
 
+        $this->save();
+
         if($player instanceof Player)
             $player->sendMessage(
                 $this->getMessage(
@@ -213,6 +219,8 @@ class aEconomy extends PluginBase {
                     [$ev->getAmount()]
                 )
             );
+
+        $this->save();
 
         return true;
     }
@@ -230,14 +238,16 @@ class aEconomy extends PluginBase {
         if($ev->isCancelled())
             return false;
 
-        $this->players->set(
-            $this->getPlayer($sender),
-            $this->getMoney($sender) - $ev->getAmount()
-        );
+        if($sender instanceof Player)
+            $this->players->set(
+                $this->getPlayer($sender),
+                $this->getMoney($sender) - $ev->getAmount()
+            );
         $this->players->set(
             $this->getPlayer($player),
             $this->getMoney($player) + $ev->getAmount()
         );
+        $this->save();
 
         $sender->sendMessage(
             $this->getMessage(

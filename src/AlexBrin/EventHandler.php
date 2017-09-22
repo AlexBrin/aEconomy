@@ -18,12 +18,12 @@ class EventHandler implements Listener {
      */
     private $plugin;
 
-    public function __construct(aEconomy $plugin) {
+    public function __construct(aEconomy &$plugin) {
         $this->plugin = $plugin;
     }
 
     public function onPlayerJoin(PlayerJoinEvent $event) {
-        $player = $event->getPlayer();
+        $player = $event->getPlayer()->getName();
 
         if($this->getPlugin()->getMoney($player) === null)
             $this->getPlugin()->setMoney(

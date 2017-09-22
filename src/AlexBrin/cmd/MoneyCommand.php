@@ -35,6 +35,7 @@ class MoneyCommand extends Command {
                 break;
 
             case 'my':
+            default:
                     if(!$sender instanceof Player)
                         return false;
 
@@ -61,7 +62,7 @@ class MoneyCommand extends Command {
                 break;
 
             case 'add':
-                    if($sender->hasPermission('aeconomy.admin')) {
+                    if(!$sender->hasPermission('aeconomy.admin')) {
                         $sender->sendMessage($this->getMessage('perm'));
                         return true;
                     }
@@ -82,7 +83,7 @@ class MoneyCommand extends Command {
                 break;
 
             case 'reduce':
-                    if($sender->hasPermission('aeconomy.admin')) {
+                    if(!$sender->hasPermission('aeconomy.admin')) {
                         $sender->sendMessage($this->getMessage('perm'));
                         return true;
                     }
@@ -103,7 +104,7 @@ class MoneyCommand extends Command {
                 break;
 
             case 'set':
-                    if($sender->hasPermission('aeconomy.admin')) {
+                    if(!$sender->hasPermission('aeconomy.admin')) {
                         $sender->sendMessage($this->getMessage('perm'));
                         return true;
                     }
@@ -128,7 +129,7 @@ class MoneyCommand extends Command {
     }
 
     public function getMessage($node, $vars = []) {
-        aEconomy::getInstance()->getMessage($node, $vars);
+        return aEconomy::getInstance()->getMessage($node, $vars);
     }
 
     private function help(): string {
