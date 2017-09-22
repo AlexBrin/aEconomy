@@ -1,0 +1,30 @@
+---
+messages:
+  balance: 'Твой баланс: %var0% руб.'
+  give:
+    in: 'Игрок %var1% дал тебе $var0%'
+    out: 'Ты дал %var0% руб. игроку %var1%'
+  add:
+    in: 'Тебе добавлено $var0% руб.'
+    out: 'Игроку %var1% добавлено %var0% руб'
+  reduce:
+    in: 'У тебя забрали %var0% руб.'
+    out: 'У игрока %var1% отнято %var0% руб.'
+  set:
+    in: 'Игроку %var1% установлено %var0% руб.'
+    out: 'Установлено денег: %var0% руб.'
+  perm: 'У тебя нет на это прав'
+  help:
+    - '§7[§daEconomy§7]§r Помощь:'
+    - '/money и /money my - баланс'
+    - '/money help - эта страница'
+    - '/money give <player> <amount> - дать деньги другому игроку'
+# ДЛЯ АДМИНИСТРАТОРОВ
+# permission: aeconomy.admin
+#    - '/money set <player> <amount> - установит деньги игроку'
+#    - '/money add <player> <amount> - добавит деньги игроку'
+#    - '/money reduce <player> <amount> - отберет деньги у игрока'
+
+params:
+  defaultAmount: 1000
+...
