@@ -129,7 +129,7 @@ class aEconomy extends PluginBase implements Listener {
 
         $sender->sendMessage(
             $this->getMessage(
-                'add.out',
+                'add.in',
                 [$ev->getAmount()]
             )
         );
@@ -137,7 +137,7 @@ class aEconomy extends PluginBase implements Listener {
         if($player instanceof Player)
             $player->sendMessage(
                 $this->getMessage(
-                    'add.in',
+                    'add.out',
                     [
                         $ev->getAmount(),
                         $this->getMoney($player)
@@ -168,7 +168,7 @@ class aEconomy extends PluginBase implements Listener {
 
         $sender->sendMessage(
             $this->getMessage(
-                'set.out',
+                'set.in',
                 [$ev->getAmount(), $player->getName()]
             )
         );
@@ -176,7 +176,7 @@ class aEconomy extends PluginBase implements Listener {
         if($player instanceof Player)
             $player->sendMessage(
                 $this->getMessage(
-                    'set.in',
+                    'set.out',
                     [$ev->getAmount(), $player->getName()]
                 )
             );
@@ -205,7 +205,7 @@ class aEconomy extends PluginBase implements Listener {
 
         $sender->sendMessage(
             $this->getMessage(
-                'reduce.out',
+                'reduce.in',
                 [$ev->getAmount(), $player->getName()]
             )
         );
@@ -215,7 +215,7 @@ class aEconomy extends PluginBase implements Listener {
         if($player instanceof Player)
             $player->sendMessage(
                 $this->getMessage(
-                    'reduce.in',
+                    'reduce.out',
                     [$ev->getAmount()]
                 )
             );
@@ -251,7 +251,7 @@ class aEconomy extends PluginBase implements Listener {
 
         $sender->sendMessage(
             $this->getMessage(
-                'give.out',
+                'give.in',
                 [$ev->getAmount(), $player->getName()]
             )
         );
@@ -259,7 +259,7 @@ class aEconomy extends PluginBase implements Listener {
         if($player instanceof Player)
             $player->sendMessage(
                 $this->getMessage(
-                    'give.in',
+                    'give.out',
                     [$ev->getAmount(), $player->getName()]
                 )
             );
