@@ -93,10 +93,6 @@ class aEconomy extends PluginBase implements Listener {
         return mb_strtolower($player);
     }
 
-    private function save() {
-        $this->players->save();
-    }
-
     ##################################
     #               API
     ##################################
@@ -105,7 +101,7 @@ class aEconomy extends PluginBase implements Listener {
     public function getMoney($player) {
         $player = $this->getPlayer($player);
 
-        return $this->players->get($player, null);
+        return $this->players->get($player, 0);
     }
 
     /**
@@ -125,12 +121,15 @@ class aEconomy extends PluginBase implements Listener {
             $this->getPlayer($player),
             $this->getMoney($player) + $ev->getAmount()
         );
-        $this->save();
+        $this->players->save();
 
         $sender->sendMessage(
             $this->getMessage(
                 'add.in',
-                [$ev->getAmount()]
+                [
+                    $ev->getAmount(),
+                    $player->getName()
+                ]
             )
         );
 
@@ -164,12 +163,15 @@ class aEconomy extends PluginBase implements Listener {
             $this->getPlayer($player),
             $ev->getAmount()
         );
-        $this->save();
+        $this->players->save();
 
         $sender->sendMessage(
             $this->getMessage(
                 'set.in',
-                [$ev->getAmount(), $player->getName()]
+                [
+                    $ev->getAmount(),
+                    $player->getName()
+                ]
             )
         );
 
@@ -210,7 +212,7 @@ class aEconomy extends PluginBase implements Listener {
             )
         );
 
-        $this->save();
+        $this->players->save();
 
         if($player instanceof Player)
             $player->sendMessage(
@@ -219,8 +221,6 @@ class aEconomy extends PluginBase implements Listener {
                     [$ev->getAmount()]
                 )
             );
-
-        $this->save();
 
         return true;
     }
@@ -247,7 +247,7 @@ class aEconomy extends PluginBase implements Listener {
             $this->getPlayer($player),
             $this->getMoney($player) + $ev->getAmount()
         );
-        $this->save();
+        $this->players->save();
 
         $sender->sendMessage(
             $this->getMessage(
