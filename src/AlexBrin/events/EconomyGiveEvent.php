@@ -1,13 +1,13 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Alex
- * Date: 22.09.2017
- * Time: 12:25
+ * Событие передачи денег
+ * Код защищен авторским правом
+ * © Alex Brin, 2017
  */
 
-namespace AlexBrin\events;
+declare(strict_types=1);
 
+namespace AlexBrin\events;
 
 use pocketmine\event\Cancellable;
 

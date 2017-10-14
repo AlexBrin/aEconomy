@@ -5,9 +5,12 @@
  * © Alex Brin, 2017
  */
 
+declare(strict_types=1);
+
 namespace AlexBrin\events;
 
 use pocketmine\command\CommandSender;
+use pocketmine\command\ConsoleCommandSender;
 use pocketmine\event\player\PlayerEvent;
 use pocketmine\OfflinePlayer;
 use pocketmine\Player;
@@ -46,12 +49,15 @@ abstract class EconomyEvent extends PlayerEvent {
 
     /**
      * EconomyEvent constructor.
-     * @param CommandSender $sender
      * @param OfflinePlayer|Player $player
      * @param float $amount
      * @param int $action
+     * @param CommandSender $sender
      */
-    public function __construct(CommandSender $sender, $player, float $amount, int $action) {
+    public function __construct($player, float $amount, int $action, CommandSender $sender = null) {
+        if($sender === null)
+            $sender = new ConsoleCommandSender();
+
         $this->commandSender = $sender;
         $this->player = $player;
         $this->amount = $amount;

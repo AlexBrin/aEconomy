@@ -5,6 +5,8 @@
  * © Alex Brin, 2017
  */
 
+declare(strict_types=1);
+
 namespace AlexBrin;
 
 use AlexBrin\cmd\MoneyCommand;
@@ -14,6 +16,7 @@ use AlexBrin\events\EconomyGiveEvent;
 use AlexBrin\events\EconomyReduceMoney;
 use AlexBrin\events\EconomySetEvent;
 use pocketmine\command\CommandSender;
+use pocketmine\command\ConsoleCommandSender;
 use pocketmine\OfflinePlayer;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
@@ -99,21 +102,23 @@ class aEconomy extends PluginBase implements Listener {
 
 
     public function getMoney($player) {
-        $player = $this->getPlayer($player);
-
-        return $this->players->get($player, 0);
+        return $this->players->get($this->getPlayer($player), 0);
     }
 
     /**
-     * @param CommandSender $sender
      * @param string|Player $player
      * @param float $amount
      * @return bool
+     * @param CommandSender $sender
      */
-    public function addMoney(CommandSender $sender, $player, float $amount): bool {
-        $player = $this->getServer()->getPlayer($player) ?? $this->getServer()->getOfflinePlayer($player);
+    public function addMoney($player, float $amount, CommandSender $sender = null): bool {
+        if($sender === null)
+            $sender = new ConsoleCommandSender();
 
-        $ev = new EconomyAddEvent($sender, $player, $amount, EconomyEvent::ECONOMY_ACTION_ADD);
+        if(!$player instanceof Player && !$player instanceof OfflinePlayer)
+            $player = $this->getServer()->getPlayer($player) ?? $this->getServer()->getOfflinePlayer($player);
+
+        $ev = new EconomyAddEvent($player, $amount, EconomyEvent::ECONOMY_ACTION_ADD, $sender);
         if($ev->isCancelled())
             return false;
 
@@ -147,15 +152,19 @@ class aEconomy extends PluginBase implements Listener {
     }
 
     /**
-     * @param CommandSender $sender
      * @param string|Player $player
      * @param float $amount
+     * @param CommandSender $sender
      * @return bool
      */
-    public function setMoney(CommandSender $sender, $player, float $amount): bool {
-        $player = $this->getServer()->getPlayer($player) ?? $this->getServer()->getOfflinePlayer($player) ?? $player;
+    public function setMoney($player, float $amount, CommandSender $sender = null): bool {
+        if($sender === null)
+            $sender = new ConsoleCommandSender();
 
-        $ev = new EconomySetEvent($sender, $player, $amount, EconomyEvent::ECONOMY_ACTION_SET);
+        if(!$player instanceof Player && !$player instanceof OfflinePlayer)
+            $player = $this->getServer()->getPlayer($player) ?? $this->getServer()->getOfflinePlayer($player);
+
+        $ev = new EconomySetEvent($player, $amount, EconomyEvent::ECONOMY_ACTION_SET, $sender);
         if($ev->isCancelled())
             return false;
 
@@ -187,16 +196,19 @@ class aEconomy extends PluginBase implements Listener {
     }
 
     /**
-     * @param CommandSender $sender
      * @param $player
      * @param float $amount
+     * @param CommandSender $sender
      * @return bool
      */
-    public function reduceMoney(CommandSender $sender, $player, float $amount): bool {
-        if(!$player instanceof Player && !$player instanceof OfflinePlayer)
-            $player = $this->getServer()->getPlayer($player) ?? $this->getServer()->getOfflinePlayer($player) ?? $player;
+    public function reduceMoney($player, float $amount, CommandSender $sender = null): bool {
+        if($sender === null)
+            $sender = new ConsoleCommandSender();
 
-        $ev = new EconomyReduceMoney($sender, $player, $amount, EconomyEvent::ECONOMY_ACTION_REDUCE);
+        if(!$player instanceof Player && !$player instanceof OfflinePlayer)
+            $player = $this->getServer()->getPlayer($player) ?? $this->getServer()->getOfflinePlayer($player);
+
+        $ev = new EconomyReduceMoney($player, $amount, EconomyEvent::ECONOMY_ACTION_REDUCE, $sender);
         if($ev->isCancelled())
             return false;
 
@@ -226,15 +238,19 @@ class aEconomy extends PluginBase implements Listener {
     }
 
     /**
-     * @param CommandSender $sender
      * @param $player
      * @param float $amount
+     * @param CommandSender $sender
      * @return bool
      */
-    public function giveMoney(CommandSender $sender, $player, float $amount): bool {
-        $player = $this->getServer()->getPlayer($player) ?? $this->getServer()->getOfflinePlayer($player) ?? $player;
+    public function giveMoney($player, float $amount, CommandSender $sender = null): bool {
+        if($sender === null)
+            $sender = new ConsoleCommandSender();
 
-        $ev = new EconomyGiveEvent($sender, $player, $amount, EconomyEvent::ECONOMY_ACTION_GIVE);
+        if(!$player instanceof Player && !$player instanceof OfflinePlayer)
+            $player = $this->getServer()->getPlayer($player) ?? $this->getServer()->getOfflinePlayer($player);
+
+        $ev = new EconomyGiveEvent($player, $amount, EconomyEvent::ECONOMY_ACTION_GIVE, $sender);
         if($ev->isCancelled())
             return false;
 
