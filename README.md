@@ -22,7 +22,7 @@ use AlexBrin\aEconomy
 
 $economy = aEconomy::getInstance();
 
-$economy->addMoney(new ConsoleCommandSender, $player, float $amount);
-$economy->reduceMoney(new ConsoleCommandSender, $player, float $amount);
-$economy->setMoney(new ConsoleCommandSender, $player, float $amount);
+$economy->addMoney($player, float $amount);
+$economy->reduceMoney($player, float $amount);
+$economy->setMoney($player, float $amount);
 ```
